@@ -277,17 +277,24 @@ const styles = {
     marginBottom: '10px'
   },
   emojiGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(8, 1fr)',
-    gap: '8px'
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px',
+    justifyContent: 'flex-start'
   },
   emojiButton: {
     fontSize: '24px',
     padding: '10px',
+    width: '48px',
+    height: '48px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#f5f5f5',
     border: 'none',
     borderRadius: '10px',
     cursor: 'pointer',
+    flexShrink: 0,
     transition: 'background-color 0.2s, transform 0.1s'
   },
   errorMessage: {
