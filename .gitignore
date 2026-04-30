@@ -66,3 +66,68 @@ frontend/.env.*
 *.war
 *.zip
 *.tar.gz
+# Python 编译缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 分发 / 打包
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 虚拟环境
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.env/
+
+# IDE / 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 项目配置 / 密钥
+.env
+.env.local
+.env.*.local
+config.ini
+settings.ini
+secrets.json
+
+# 日志 / 数据库
+*.log
+*.sqlite
+*.sqlite3
+*.db
+
+# 测试 / 覆盖率
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# 操作系统垃圾
+.DS_Store
+Thumbs.db
