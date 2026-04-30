@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, redirect, url_for
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_cors import CORS
 import io
@@ -6,6 +6,7 @@ import qrcode
 import uuid
 import random
 import jieba
+import os
 from collections import Counter
 from database import (
     init_db, create_room, get_room, get_all_rooms,
@@ -13,12 +14,66 @@ from database import (
     get_all_danmaku_content, clear_danmakus
 )
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            static_folder='../frontend/dist', 
+            static_url_path='')
 app.config['SECRET_KEY'] = 'sayyou-danmaku-secret-key'
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
+FRONTEND_DEV_PORT = 3000
+BACKEND_PORT = 5000
+
+def get_frontend_url(path=''):
+    dist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend/dist')
+    if os.path.exists(os.path.join(dist_path, 'index.html')):
+        return None
+    
+    host_url = request.host_url.rstrip('/')
+    frontend_url = host_url.replace(f':{BACKEND_PORT}', f':{FRONTEND_DEV_PORT}')
+    
+    env_url = os.environ.get('FRONTEND_URL')
+    if env_url:
+        frontend_url = env_url.rstrip('/')
+    
+    return frontend_url + path if path else frontend_url
+
 init_db()
+
+@app.route('/')
+def index():
+    dist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend/dist')
+    if os.path.exists(os.path.join(dist_path, 'index.html')):
+        return send_file(os.path.join(dist_path, 'index.html'))
+    return redirect(get_frontend_url())
+
+@app.route('/admin')
+def admin_redirect():
+    dist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend/dist')
+    if os.path.exists(os.path.join(dist_path, 'index.html')):
+        return send_file(os.path.join(dist_path, 'index.html'))
+    return redirect(get_frontend_url('/admin'))
+
+@app.route('/user/<room_id>')
+def user_redirect(room_id):
+    dist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend/dist')
+    if os.path.exists(os.path.join(dist_path, 'index.html')):
+        return send_file(os.path.join(dist_path, 'index.html'))
+    return redirect(get_frontend_url(f'/user/{room_id}'))
+
+@app.route('/screen/<room_id>')
+def screen_redirect(room_id):
+    dist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend/dist')
+    if os.path.exists(os.path.join(dist_path, 'index.html')):
+        return send_file(os.path.join(dist_path, 'index.html'))
+    return redirect(get_frontend_url(f'/screen/{room_id}'))
+
+@app.route('/stats/<room_id>')
+def stats_redirect(room_id):
+    dist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend/dist')
+    if os.path.exists(os.path.join(dist_path, 'index.html')):
+        return send_file(os.path.join(dist_path, 'index.html'))
+    return redirect(get_frontend_url(f'/stats/{room_id}'))
 
 @app.route('/api/rooms', methods=['GET'])
 def list_rooms():
